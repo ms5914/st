@@ -1,0 +1,38 @@
+Part 1: Given a list of transactions, output the names and balances of all users whose balance is non-zero.
+* Input Example:
+
+```
+account_name, timestamp, currency, amount
+acct_123, 1, usd, 1000
+acct_123, 2, usd, 500
+acct_321, 3, usd, 400
+acct_321, 4, usd, -400
+
+```
+
+* Output: `acct_123, 1500` (Note: `acct_321` is 0, so it is excluded).
+Part 2: Identify rejected transactions. If a transaction causes a user's balance to drop below zero (balance - amount < 0), add it to a `rejected_list`. Output both the rejected list and the final non-zero balances.
+* Input Example:
+
+```
+account_name, timestamp, currency, amount
+acct_123, 1, usd, 1000
+acct_123, 2, usd, 500
+acct_321, 3, usd, 400
+acct_321, 4, usd, -500
+
+```
+
+* Output: `acct_123, 1500`, `acct_321, 400`, and `rejected_transactions = ["acct_321, 4, usd, -500"]`.
+Part 3: This part was very long and split into 3(a) and 3(b). I only finished 3(a) and didn't have time to look at 3(b).
+* 3(a): You are given a `platform_id`. For any account other than the platform account, if the balance would drop below zero, you can "borrow" money from the `platform_id` to cover the deficit. You need to output three things: `max_reserve` (the maximum amount borrowed from the platform at any one time), `rejected_transactions`, and the non-zero balances.
+* Input Example (platform_id is acct_123):
+
+```
+acct_123, 1, usd, 1000
+acct_321, 3, usd, 400
+acct_321, 4, usd, -500
+
+```
+
+* Output: `max_reserve = 100`, `rejected_transactions = []`, and `acct_123, 900`.
