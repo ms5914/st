@@ -1,0 +1,103 @@
+Payment Invoice Reconciliation
+The Challenge
+You need to build a system that matches incoming payments to unpaid invoices. When a customer sends money, you must figure out which invoice they are paying. The logic gets harder in three steps:
+Match by ID: Look for a specific invoice ID written in the payment note.
+Match by Amount: If there is no ID, look for an invoice with the exact same money amount.
+Fuzzy Match: If the exact amount isn't found, look for an amount that is close (to handle bank fees).
+Data Format
+
+
+Payment (a single string of text):
+"payment-id, amount, memo"
+payment-id: A unique ID for the payment.
+amount: The money amount (integer, in cents).
+memo: A note about the payment. It might contain an invoice ID.
+
+
+Invoices (a list of strings):
+
+[
+  "invoice-id, due-date, amount",
+  "invoice-id, due-date, amount",
+  ...
+]
+
+
+invoice-id: A unique ID for the invoice.
+due-date: The date the bill is due (YYYY-MM-DD).
+amount: The invoice amount (integer, in cents).
+
+
+Expected Output
+Return a text string that says which payment matched which invoice:
+
+"Payment {payment-id} paid {amount} for invoice {invoice-id} due on {date}"
+If you cannot find a match, return this:
+
+"Payment {payment-id} could not be matched to any invoice"
+Step 1: Match by ID
+The Task
+Write a function called reconcile_payment(payment, invoices). This function should match a payment to an invoice when the payment note specifically lists an invoice ID.
+The note will contain text like "paying for: invoice-id" or "Paying off: invoice-id". It can be upper or lower case. You need to find this ID and match it to the list of invoices.
+
+Example
+Input:
+
+payment = "payment-001, 1000, Paying off: inv-123"
+
+invoices = [
+    "inv-123, 2024-03-15, 1000",
+    "inv-456, 2024-03-20, 1000",
+    "inv-789, 2024-02-10, 500"
+]
+Output:
+
+"Payment payment-001 paid 1000 for invoice inv-123 due on 2024-03-15"
+Rules
+Read the payment string to get the ID, amount, and note.
+Look inside the note for an invoice ID (look for "paying for: ...").
+Find the invoice in the list that matches that ID.
+Return the final result string.
+Handle cases where the ID in the note does not exist in your list.
+Edge Cases
+The ID in the note is not in the invoice list.
+There are many invoices, but only one correct ID.
+The text has different capital letters (like "Paying" vs "paying").
+The payment string is missing data.
+
+
+Step 2: Match by Amount
+The Task
+Update your code to handle payments that do not have an invoice ID. If the note does not contain an ID, look for an invoice that has the exact same amount.
+
+If multiple invoices have the same amount, pick the one with the earliest due date.
+
+Important: Always try the ID match from Step 1 first. Only use the amount match if the ID match fails.
+
+Example
+Input:
+
+payment = "payment-002, 500, Monthly subscription"
+
+invoices = [
+    "inv-001, 2024-03-22, 1000",
+    "inv-002, 2024-02-05, 500",
+    "inv-003, 2024-03-01, 500",
+    "inv-004, 2024-01-15, 500"
+]
+Output:
+
+"Payment payment-002 paid 500 for invoice inv-004 due on 2024-01-15"
+Note: inv-004 is chosen because it has the earliest date among the invoices worth 500.
+
+Rules
+Check for an invoice ID in the note first (Step 1 logic).
+If no ID is found, search for invoices that match the payment amount.
+If you find multiple invoices with the same amount, pick the oldest one.
+Read the dates correctly to see which is older.
+Return "could not be matched" if no match is found.
+Questions to Ask the Interviewer
+If we match by ID, does the money amount also need to match?
+What if two invoices have the same amount and the exact same date?
+What date format are we using?
+Do we need to handle negative numbers or zero?
