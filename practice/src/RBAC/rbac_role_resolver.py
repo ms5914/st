@@ -4,6 +4,7 @@ from collections import defaultdict
 class RBACRoleResolver:
     def __init__(self, accounts: list[dict], user_role_assignments: list[dict]):
         # Map account to parent
+        ### IGnore for first question. Its not serial.
         self.parent_map = {}
         for account in accounts:
             self.parent_map[account["accountId"]] = account["parent"]
