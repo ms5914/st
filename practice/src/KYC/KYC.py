@@ -160,6 +160,7 @@ def validate_businesses(csv_data):
 
         if (1.0*len(matches))/len(business_name) < 0.5:
             results.append(print_verification(stripped_elements, False))
+            continue
 
         results.append(print_verification(stripped_elements, True))
     return "\n".join(results)
